@@ -19,12 +19,18 @@ El proyecto se construye con Maven, y la tarea es pasarlo a Gradle.
 
 ## Requisitos
 
-Se necesita Java 21, Maven y Google Chrome. Con eso, el proyecto corre tal como viene:
+Se necesita Java 21 y Google Chrome. El proyecto ya está en Gradle y trae el wrapper, así que no hace falta instalar Gradle:
 
 ```bash
-mvn test                     # suite de testng.xml, 6 pruebas
-mvn test-compile exec:java   # suite armada en código, solo smoke
+./gradlew test                       # suite de testng.xml (headless)
+./gradlew test -Pheadless=false      # misma suite con el navegador visible
+./gradlew dynamicSuite               # suite armada en código, solo smoke
+./gradlew dynamicSuite -Pgroups=regression -Pheadless=false
 ```
+
+En Windows (PowerShell/cmd) se usa `.\gradlew.bat` en lugar de `./gradlew`.
+
+`testng.xml` quedó editado para correr dos bloques: `smoke` (login y carrito) y `login-regression` (regresión de login sin el caso de contraseña incorrecta).
 
 ## Qué trae
 
@@ -32,9 +38,9 @@ mvn test-compile exec:java   # suite armada en código, solo smoke
 |---|---|
 | `src/test/java/edu/ufm/qa/pages/` | Los Page Objects de login, inventario, carrito y checkout. |
 | `src/test/java/edu/ufm/qa/tests/` | `LoginTest` y `CartTest`, con sus grupos `smoke` y `regression`. |
-| `testng.xml` | La suite que corre `mvn test`. |
+| `testng.xml` | La suite que corre `./gradlew test`. |
 | `src/test/java/edu/ufm/qa/DynamicSuiteRunner.java` | La misma idea de suite, armada en código. |
-| `pom.xml` | El build de Maven. |
+| `build.gradle`, `settings.gradle`, `gradlew` | El build de Gradle (reemplaza al `pom.xml` de Maven). |
 
 ## Ejercicio
 

@@ -2,16 +2,33 @@
 <suite name="saucedemo" parallel="classes" thread-count="2">
   <parameter name="browser" value="chrome"/>
 
-  <test name="web">
+  <!-- Smoke: lo mínimo de login y carrito. -->
+  <test name="smoke">
     <groups>
       <run>
         <include name="smoke"/>
-        <include name="regression"/>
       </run>
     </groups>
     <classes>
       <class name="edu.ufm.qa.tests.LoginTest"/>
       <class name="edu.ufm.qa.tests.CartTest"/>
+    </classes>
+  </test>
+
+  <!-- Regresión solo del login, sin el caso de contraseña incorrecta. -->
+  <test name="login-regression">
+    <groups>
+      <run>
+        <include name="regression"/>
+        <exclude name="smoke"/>
+      </run>
+    </groups>
+    <classes>
+      <class name="edu.ufm.qa.tests.LoginTest">
+        <methods>
+          <exclude name="wrongPasswordSeesError"/>
+        </methods>
+      </class>
     </classes>
   </test>
 </suite>

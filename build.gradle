@@ -1,0 +1,50 @@
+plugins {
+    id 'java'
+}
+
+group = 'edu.ufm.qa'
+version = '1.0.0'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.seleniumhq.selenium:selenium-java:4.50.0'
+    testImplementation 'org.testng:testng:7.12.0'
+}
+
+// Equivalente a surefire: corre la suite de testng.xml.
+// -Pheadless=false abre el navegador visible (por defecto es headless).
+tasks.named('test', Test) {
+    useTestNG {
+        suites 'testng.xml'
+    }
+    systemProperty 'headless', findProperty('headless') ?: 'true'
+    outputs.upToDateWhen { false }
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+        exceptionFormat = 'full'
+    }
+}
+
+// Equivalente a exec:java: la suite armada en código.
+// -Pgroups=smoke (por defecto) o regression.
+tasks.register('dynamicSuite', JavaExec) {
+    group = 'verification'
+    description = 'Corre DynamicSuiteRunner (testng.xml armado en código).'
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'edu.ufm.qa.DynamicSuiteRunner'
+    systemProperty 'headless', findProperty('headless') ?: 'true'
+    systemProperty 'run.groups', findProperty('groups') ?: 'smoke'
+}
