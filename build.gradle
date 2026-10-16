@@ -26,11 +26,13 @@ dependencies {
 
 // Equivalente a surefire: corre la suite de testng.xml.
 // -Pheadless=false abre el navegador visible (por defecto es headless).
+// -Ppause=3000 deja cada navegador abierto 3 s al terminar la prueba.
 tasks.named('test', Test) {
     useTestNG {
         suites 'testng.xml'
     }
     systemProperty 'headless', findProperty('headless') ?: 'true'
+    systemProperty 'pause.ms', findProperty('pause') ?: '0'
     outputs.upToDateWhen { false }
     testLogging {
         events 'passed', 'skipped', 'failed'

@@ -23,8 +23,10 @@ public abstract class BaseTest {
         driver.get("https://www.saucedemo.com/");
     }
 
+    // -Dpause.ms deja el navegador abierto un rato antes de cerrarlo (para verlo).
     @AfterMethod(alwaysRun = true)
-    public void closeBrowser() {
+    public void closeBrowser() throws InterruptedException {
+        Thread.sleep(Long.getLong("pause.ms", 0));
         if (driver != null) driver.quit();
     }
 
