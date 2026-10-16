@@ -57,3 +57,7 @@ La fecha límite es el jueves 15 de octubre de 2026 a las 23:59. Se entregan dos
 
 - El link al fork, con el proyecto ya en Gradle.
 - Un video del flujo corriendo con Gradle y el navegador visible.
+
+## Video
+
+[video-gradle.mp4](video-gradle.mp4): las pruebas corriendo con Gradle y el navegador visible (`.\gradlew.bat test -Pheadless=false -Ppause=3000`).
